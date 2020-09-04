@@ -1,5 +1,6 @@
 import React, { useReducer } from "react";
 import "./App.css";
+import { UPDATE_FORM, onInputChange } from "./lib/formUtils";
 
 /**
  * The initial state of the form
@@ -23,7 +24,26 @@ const initialState = {
  * Reducer which will perform form state update
  */
 const formsReducer = (state, action) => {
-  return state;
+  switch (action.type) {
+    case UPDATE_FORM:
+      const {
+        name,
+        value,
+        hasError,
+        error,
+        touched,
+        isFormValid,
+      } = action.data;
+      return {
+        ...state,
+        // update the state of the particular field,
+        // by retaining the state of other fields
+        [name]: { ...state[name], value, hasError, error, touched },
+        isFormValid,
+      };
+    default:
+      return state;
+  }
 };
 
 function App() {
@@ -40,6 +60,9 @@ function App() {
             name="name"
             id="name"
             value={formState.name.value}
+            onChange={(e) => {
+              onInputChange("name", e.target.value, dispatch, formState);
+            }}
           />
         </div>
         <div className="input_wrapper">
