@@ -25,3 +25,8 @@
 .toc input {
   cursor: pointer;
 }
+
+.error {
+  margin-top: 0.25rem;
+  color: #f65157;
+}

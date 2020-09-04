@@ -1,6 +1,6 @@
 import React, { useReducer } from "react";
 import "./App.css";
-import { UPDATE_FORM, onInputChange } from "./lib/formUtils";
+import { UPDATE_FORM, onInputChange, onFocusOut } from "./lib/formUtils";
 
 /**
  * The initial state of the form
@@ -49,6 +49,8 @@ const formsReducer = (state, action) => {
 function App() {
   const [formState, dispatch] = useReducer(formsReducer, initialState);
 
+  console.table({ "name state": formState.name });
+
   return (
     <div className="App">
       <h1 className="title">Sign Up</h1>
@@ -63,7 +65,13 @@ function App() {
             onChange={(e) => {
               onInputChange("name", e.target.value, dispatch, formState);
             }}
+            onBlur={(e) => {
+              onFocusOut("name", e.target.value, dispatch, formState);
+            }}
           />
+          {formState.name.touched && formState.name.hasError && (
+            <div className="error">{formState.name.error}</div>
+          )}
         </div>
         <div className="input_wrapper">
           <label htmlFor="email">Email:</label>
